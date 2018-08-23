@@ -184,6 +184,7 @@ public class FabricStatement implements BlkchnStatement {
                             .getValue();
                 }
                 dataframe = new FunctionExecutor(logicalPlan, queryBlock).executeCall();
+                resultSet = new FabricResultSet(this, dataframe, tableName);
                 break;
 
             default:

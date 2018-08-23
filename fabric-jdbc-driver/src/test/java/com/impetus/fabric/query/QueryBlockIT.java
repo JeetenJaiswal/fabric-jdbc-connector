@@ -218,7 +218,7 @@ public class QueryBlockIT {
 
     @Test
     //this query should return empty dataset.
-    public void testANdOROnQuery() throws ClassNotFoundException, SQLException {
+    public void testAndOROnQuery() throws ClassNotFoundException, SQLException {
         Class.forName("com.impetus.fabric.jdbc.FabricDriver");
         File configFolder = new File("src/test/resources/blockchain-query");
         String configPath = configFolder.getAbsolutePath();
@@ -244,7 +244,7 @@ public class QueryBlockIT {
 
     // No need to Assert, test passed if didnt throw exception
     @Test
-    public void testCallFunction() throws ClassNotFoundException, SQLException{
+    public void testCallFunction() throws ClassNotFoundException, SQLException, InterruptedException{
         long currentTimeStamp = System.currentTimeMillis();
         Class.forName("com.impetus.fabric.jdbc.FabricDriver");
         File configFolder = new File("src/test/resources/blockchain-query");
@@ -254,15 +254,17 @@ public class QueryBlockIT {
         String createFuncQuery = "CREATE FUNCTION chncodefunc"+currentTimeStamp+" AS 'assettransfer' WITH VERSION '1.0'";
         System.out.println(stat.execute(createFuncQuery));
 
+        Thread.sleep(4000);
         String callQuery = "CALL chncodefunc"+currentTimeStamp+"('getAsset', 1000)";
-        stat.execute(callQuery);
-
+        ResultSet rs = stat.executeQuery(callQuery);
+        assert(rs.next());
+        assert(rs.getString(1).contains("1000"));
 
     }
 
     // No need to Assert, test passed if didnt throw exception
     @Test
-    public void testInsertFunction() throws ClassNotFoundException, SQLException{
+    public void testInsertFunction() throws ClassNotFoundException, SQLException, InterruptedException{
         Class.forName("com.impetus.fabric.jdbc.FabricDriver");
         File configFolder = new File("src/test/resources/blockchain-query");
         String configPath = configFolder.getAbsolutePath();
@@ -273,6 +275,11 @@ public class QueryBlockIT {
         stat.execute(createFuncQuery);
         String insertQuery = "INSERT INTO chncodefunc_testInsertFunction VALUES('transferAsset', 1001, 2001, 2002)";
         stat.execute(insertQuery);
+        Thread.sleep(4000);
+        String callQuery = "CALL chncodefunc_testInsertFunction('getAsset', 1001)";
+        ResultSet rs = stat.executeQuery(callQuery);
+        assert(rs.next());
+        assert(rs.getString(1).contains("2002"));
     }
 
 

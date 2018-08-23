@@ -8,3 +8,14 @@ mvn exec:java -Dexec.mainClass="com.impetus.fabric.example.App" -DconfigPath=<co
 ```
 
 The Asset IDs that exist are *1000*, *1001*, *1002*, *1003*, *1004* and the participant IDs that exist are *2000*, *2001*, *2002*.
+
+
+Flight Delay Insurance App
+=====
+
+To run flight delay insurance example, execute below command
+
+```
+mvn exec:java -Dexec.mainClass="com.impetus.fabric.flightdelayinsuranceexample.InsuranceApp" -DconfigPath=<configPathDirectory> -Dchannel=<channelName> -Dexec.classpathScope="compile" -Dexec.cleanupDaemonThreads=false
+
+```
